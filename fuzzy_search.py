@@ -120,11 +120,13 @@ def print_fuzzy_results(results: list[str], query: str = ""):
         print(f"{highlighted}{dots}{percent}% {dist_offset}({dist})")
 
 
-
-print("Press ESC to quit.")
-
 words = load_words("words.txt", False)
 word = ""
+
+os.system('cls' if os.name == 'nt' else 'clear')
+print("Press ESC to quit.\n")
+ic(word)
+
 
 while True:
         event = keyboard.read_event(suppress=True)  # Read keyboard input
