@@ -78,44 +78,47 @@ def fuzzy_search(query: str, words: list[str], top_k: int = 5, max_dist: int | N
     else:
         return formatted
 
-def print_fuzzy_results(results: list[str]):
+def print_fuzzy_results(results: list[str], query: str = ""):
     """
-    Pretty-print fuzzy search results sorted by similarity.
-
+    Pretty-print fuzzy search results sorted by similarity, highlighting typed query.
+    
     Each result string should be in the format:
         "word  (distance=d, similarity=s)"
     """
-    # Parse the results into tuples of (word, similarity, distance)
+    if not results:
+        return
 
-    if results == []:
-        pass
-    else:
-        parsed = []
-        for r in results:
-            # Extract word
-            word_part = r.split("  (")[0]
-            # Extract distance and similarity
-            dist_part = r[r.find("distance=")+9 : r.find(", similarity")]
-            sim_part = r[r.find("similarity=")+11 : r.find(")")]
-            parsed.append((word_part, float(sim_part), int(dist_part)))
+    parsed = []
+    for r in results:
+        word_part = r.split("  (")[0]
+        dist_part = r[r.find("distance=")+9 : r.find(", similarity")]
+        sim_part = r[r.find("similarity=")+11 : r.find(")")]
+        parsed.append((word_part, float(sim_part), int(dist_part)))
 
-        # Sort by similarity descending, then by word alphabetically
-        parsed.sort(key=lambda x: (-x[1], x[0]))
+    # Sort by similarity descending, then by word alphabetically
+    parsed.sort(key=lambda x: (-x[1], x[0]))
 
-        # Determine padding for alignment
-        max_word_len = max(len(word) for word, _, _ in parsed)
-        for word, sim, dist in parsed:
-            dots = "." * (max_word_len + 15 - len(word))  # adjust spacing
-            percent = int(sim * 100)
+    # Determine padding
+    max_word_len = max(len(word) for word, _, _ in parsed)
 
-            if percent == 100:
-                dist_offset = ""
-            elif percent == 0:
-                dist_offset = "  "
-            else:
-                dist_offset = " "
+    for word, sim, dist in parsed:
+        percent = int(sim * 100)
 
-            print(f"{word.title()}{dots}{percent}% {dist_offset}({dist})")
+        # Highlight matching part of the word
+        highlight_len = len(query)
+        word_lower = word.lower()
+        query_lower = query.lower()
+        if word_lower.startswith(query_lower) and highlight_len > 0:
+            highlighted = f"\033[92m{word[:highlight_len].title()}\033[0m{word[highlight_len:].title()}"
+        else:
+            highlighted = word.title()
+
+        # Dots and spacing
+        dots = "." * (max_word_len + 15 - len(word))
+        dist_offset = "" if percent == 100 else " " if percent != 0 else "  "
+
+        print(f"{highlighted}{dots}{percent}% {dist_offset}({dist})")
+
 
 
 print("Press ESC to quit.")
@@ -144,5 +147,5 @@ while True:
             ic(word)
             print()
             results = fuzzy_search(word, words, 10, 4, False)
-            print_fuzzy_results(results)
+            print_fuzzy_results(results, word)
 
