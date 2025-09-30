@@ -109,7 +109,7 @@ def print_fuzzy_results(results: list[str], query: str = ""):
         word_lower = word.lower()
         query_lower = query.lower()
         if word_lower.startswith(query_lower) and highlight_len > 0:
-            highlighted = f"\033[92m{word[:highlight_len].title()}\033[0m{word[highlight_len:].title()}"
+            highlighted = f"\033[92m{word[:highlight_len].title()}\033[0m{word[highlight_len:]}"
         else:
             highlighted = word.title()
 
