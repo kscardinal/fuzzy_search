@@ -148,6 +148,6 @@ while True:
             print("Press ESC to quit.\n")
             ic(word)
             print()
-            results = fuzzy_search(word, words, 10, 4, False)
+            results = fuzzy_search(word, words, 25, 10, False)
             print_fuzzy_results(results, word)
 
