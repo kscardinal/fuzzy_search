@@ -13,6 +13,7 @@
 <div align="center">
   <img src="https://img.shields.io/badge/Python-3776AB.svg?style=flat&logo=Python&logoColor=white" alt="Python Badge">
   <img src="https://img.shields.io/badge/UV-DE5FE9.svg?style=flat&logo=UV&logoColor=white" alt="UV Badge">
+  <img src="https://img.shields.io/badge/Markdown-000000.svg?style=flat&logo=Markdown&logoColor=white" alt="Markdown Badge">
 </div>
 
 ---
